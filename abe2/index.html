@@ -298,32 +298,26 @@ class PointerHandler {
 			case GameState.START: 
 
 				if(inrect(pointer.x,pointer.y, 32,256,32,32)) {
-					console.log('UP');
 					movePlayer( 0,-1);
 				}        
 
 				if(inrect(pointer.x,pointer.y, 64,288,32,32)) {
-					console.log('RIGHT');
 					movePlayer( 1, 0);
 				}        
 
 				if(inrect(pointer.x,pointer.y, 32,320,32,32)) {
-					console.log('DOWN');
 					movePlayer( 0, 1);
 				}        
 
 				if(inrect(pointer.x,pointer.y,  0,288,32,32)) {
-					console.log('LEFT');
 					movePlayer(-1, 0);
 				}        
 
 				if(inrect(pointer.x,pointer.y,224,288,32,32)) {
-					console.log('RESET');
 					init0();
 				}        
 
 				if(inrect(pointer.x,pointer.y,160,288,32,32)) {
-					console.log('SELECT');
 					init1();
 					gameState=GameState.SELECT;
 				}        
@@ -333,13 +327,11 @@ class PointerHandler {
 			case GameState.COMPLETE:
 
 				if(inrect(pointer.x,pointer.y,224,288,32,32)) {
-					console.log('RESET');
 					init0();
 					gameState=GameState.START;
 				}        
 
 				if(inrect(pointer.x,pointer.y,160,288,32,32)) {
-					console.log('SELECT');
 					init1();
 					gameState=GameState.SELECT;
 				}        
