@@ -266,6 +266,7 @@ class PointerHandler {
 		pointer.isDown=true;
 
 		switch(gameState) {
+
 			case GameState.SELECT: 
 
 				if(inrect(pointer.x,pointer.y,  0,288,32,32)) {
@@ -278,6 +279,12 @@ class PointerHandler {
 					console.log('RIGHT');
 					if(currentLevel<levels.length-1) currentLevel++;
 					drawLevel(ctx,levels[currentLevel],sprites,0,0,1);
+				}        
+
+				if(inrect(pointer.x,pointer.y,160,288,32,32)) {
+					console.log('SELECT');
+					init0();
+					gameState=GameState.START;					
 				}        
 
 			break;
@@ -301,6 +308,17 @@ class PointerHandler {
 				if(inrect(pointer.x,pointer.y,  0,288,32,32)) {
 					console.log('LEFT');
 					movePlayer(-1, 0);
+				}        
+
+				if(inrect(pointer.x,pointer.y,224,288,32,32)) {
+					console.log('RESET');
+					init0();
+				}        
+
+				if(inrect(pointer.x,pointer.y,160,288,32,32)) {
+					console.log('SELECT');
+					init1();
+					gameState=GameState.SELECT;
 				}        
 
 				break;
@@ -415,8 +433,10 @@ function drawPad(ctx,pad) {
 
 	drawCanvas(ctx,pad,160,288,2,4);
 	drawCanvas(ctx,pad,224,288,2,5);
+/*
 	drawCanvas(ctx,pad,192,256,2,6);
 	drawCanvas(ctx,pad,192,320,2,7);
+*/
 }
 
 function clrscr(ctx) {
@@ -436,7 +456,7 @@ canvas.width = 256;
 canvas.height = 384;
 canvas.style.border = "1px solid white";
 
-var timerInterval=null;
+var timerInterval;
 var elapsedTime=0;
 
 var player={
@@ -449,11 +469,8 @@ var player={
 var currentLevel=0;
 var level=[];
 
-function init() { 
-	if(timerInterval) {
-		clearInterval(timerInterval);
-		timerInterval=null;
-	}
+function init0() { 
+	clearInterval(timerInterval);
 
 	elapsedTime=0;
 
@@ -490,12 +507,17 @@ function init() {
 	drawText(ctx,font,"LEVEL:"+String(currentLevel).padStart(4),10*13+2,16*14+2,2);
 	drawText(ctx,font,"TIME: "+String(elapsedTime).padStart(4),10*13+2,16*15+2,2);}
 
-clrscr(ctx);
-drawLevel(ctx,levels[currentLevel],sprites,0,0,1);
-drawPad(ctx,pad);
-drawText(ctx,font,"SELECT [Z]",2,16*14+2,2);
-drawText(ctx,font,"LEVEL:"+String(currentLevel).padStart(4),10*13+2,16*14+2,2);
-drawText(ctx,font,"CHANGE [LEFT] [RIGHT]",2,16*15+2,2);
+function init1() {
+	clearInterval(timerInterval);
+	clrscr(ctx);
+	drawLevel(ctx,levels[currentLevel],sprites,0,0,1);
+	drawPad(ctx,pad);
+	drawText(ctx,font,"SELECT",2,16*14+2,2);
+	drawText(ctx,font,"LEVEL:"+String(currentLevel).padStart(4),10*13+2,16*14+2,2);
+	drawText(ctx,font,"[LEFT] [RIGHT] [Z]",2,16*15+2,2);
+}
+
+init1();
 
 const handler = new PointerHandler(canvas);
 
@@ -529,7 +551,7 @@ function handleDirection(key) {
 					drawText(ctx,font,"LEVEL:"+String(currentLevel).padStart(4),10*13+2,16*14+2,2);
 					break;
 				case 'z':
-					init();
+					init0();
 					gameState=GameState.START;					
 					break;
 			}
@@ -556,20 +578,12 @@ function handleDirection(key) {
 					movePlayer( 1, 0);
 					break;
         case 'x':
-        	init();
+        	init0();
 					break;
 				case 'z':
-					if(timerInterval) {
-						clearInterval(timerInterval);
-						timerInterval=null;
-					}
-					clrscr(ctx);
-					drawLevel(ctx,levels[currentLevel],sprites,0,0,1);
-					drawPad(ctx,pad);
-					drawText(ctx,font,"SELECT",2,16*14+2,2);
-					drawText(ctx,font,"LEVEL:"+String(currentLevel).padStart(4),10*13+2,16*14+2,2);
-					drawText(ctx,font,"[LEFT] [RIGHT] [Z]",2,16*15+2,2);
+					init1();
 					gameState=GameState.SELECT;
+					break;
   	  }
   	  break;
 	}
